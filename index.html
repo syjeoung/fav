@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting...</title>
+  <script>
+    // Check if we are on the internal network by checking the hostname
+    if (window.location.hostname === "172.30.1.100") {
+      window.location.href = "http://172.30.1.100/sy_fav_supabase/index.php";
+    } else {
+      window.location.href = "http://112.173.107.28:12345/sy_fav_supabase/index.php";
+    }
+  </script>
+</head>
+<body>
+  If you are not redirected automatically, follow this link:
+  <a href="http://172.30.1.100/sy_fav_supabase/index.php">Internal Service</a>
+</body>
+</html>
