@@ -4,16 +4,43 @@
   <meta charset="UTF-8">
   <title>Redirecting...</title>
   <script>
-    // Check if we are on the internal network by checking the hostname
-    if (window.location.hostname === "172.30.1.100") {
-      window.location.href = "http://172.30.1.100/sy_fav_supabase/index.php";
-    } else {
-      window.location.href = "http://112.173.107.28:12345/sy_fav_supabase/index.php";
+    var internalUrl = "http://172.30.1.100/sy_fav_supabase/index.php";
+    var externalUrl = "http://112.173.107.28:12345/sy_fav_supabase/index.php";
+    var isRedirected = false;
+
+    function redirectTo(url) {
+      if (!isRedirected) {
+        isRedirected = true;
+        window.location.href = url;
+      }
     }
+
+    var img = new Image();
+
+    // 내부 서버에 ping.png가 성공적으로 로드되면 내부망으로 판단
+    img.onload = function() {
+      redirectTo(internalUrl);
+    };
+
+    // 에러 발생 시 판단 보류, 타임아웃까지 대기
+    img.onerror = function() {
+      // 아무것도 하지 않음 (서버가 꺼져 있을 가능성을 고려)
+    };
+
+    // 2초 타임아웃: ping.png 로드가 실패하면 외부망으로 판단
+    setTimeout(function() {
+      redirectTo(externalUrl);
+    }, 2000);
+
+    // 내부 서버에 존재하는 작은 이미지 파일 요청
+    // (내부 서버 루트에 1x1 투명 ping.png 파일을 미리 올려두어야 함)
+    img.src = "http://172.30.1.100/ping.png?t=" + Date.now();
   </script>
 </head>
 <body>
-  If you are not redirected automatically, follow this link:
-  <a href="http://172.30.1.100/sy_fav_supabase/index.php">Internal Service</a>
+  <p>네트워크 환경을 확인 중입니다...</p>
+  <p>자동으로 이동하지 않으면 아래 링크를 선택하세요:</p>
+  <a href="http://172.30.1.100/sy_fav_supabase/index.php">내부망 접속</a> |
+  <a href="http://112.173.107.28:12345/sy_fav_supabase/index.php">외부망 접속</a>
 </body>
 </html>
